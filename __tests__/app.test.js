@@ -19,3 +19,16 @@ describe("GET /api/categories", () => {
       });
   });
 });
+
+describe("GET /api/reviews/:review_id", () => {
+  test.only("status 200, responds with requested review", () => {
+    const REVIEW_ID = 2;
+    return request(app)
+      .get(`/api/reviews/${REVIEW_ID}`)
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body, "<<<<<<<<<<");
+        expect(body.review).toBeInstanceOf(Object);
+      });
+  });
+});
