@@ -55,64 +55,60 @@ const seed = (data) => {
         title VARCHAR(100),
         review_body TEXT,
         designer VARCHAR(100),
-        review_img_url VARCHAR(200) DEFAULT "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg" NOT NULL,
+        review_img_url VARCHAR(200) DEFAULT 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg' NOT NULL,
         votes INT DEFAULT 0 NOT NULL,
         category VARCHAR REFERENCES categories(slug),
         owner VARCHAR(100) REFERENCES users(username) ON DELETE CASCADE NOT NULL,
         created_at TIMESTAMP DEFAULT NOW()
       );`);
+    })
+    .then(() => {
+      const queryStr = format(
+        `INSERT INTO reviews
+    (title, review_body, designer, review_img_url, votes, category, owner, created_at)
+    VALUES %L
+    RETURNING *;`,
+        reviewData.map((rev) => [
+          rev.title,
+          rev.review_body,
+          rev.designer,
+          rev.review_img_url,
+          rev.votes,
+          rev.category,
+          rev.owner,
+          rev.created_at,
+        ])
+      );
+      return db.query(queryStr);
+    })
+    .then(() => {
+      return db.query(
+        `CREATE TABLE comments (
+      comment_id SERIAL PRIMARY KEY,
+      author VARCHAR REFERENCES users(username),
+      review_id INT REFERENCES reviews(review_id),
+      votes INT DEFAULT 0,
+      created_at TIMESTAMP DEFAULT now(),
+      body TEXT
+    );`
+      );
+    })
+    .then(() => {
+      const queryStr = format(
+        `INSERT INTO comments
+    (author, review_id, votes, created_at, body)
+    VALUES %L
+    RETURNING *;`,
+        commentData.map((com) => [
+          com.author,
+          com.review_id,
+          com.votes,
+          com.created_at,
+          com.body,
+        ])
+      );
+      return db.query(queryStr);
     });
-
-  /////////////error: cannot use column reference in DEFAULT expression//
-
-  // .then(() => {
-  //   const queryStr = format(
-  //     `INSERT INTO reviews
-  //   (title, review_body, designer, review_img_url, votes, category, owner, created_at, body)
-  //   VALUES %L
-  //   RETURNING *;`,
-  //     reviewData.map((rev) => [
-  //       rev.title,
-  //       rev.review_body,
-  //       rev.designer,
-  //       rev.review_img_url,
-  //       rev.votes,
-  //       rev.category,
-  //       rev.owner,
-  //       rev.created_at,
-  //       rev.body,
-  //     ])
-  //   );
-  //   return db.query(queryStr);
-  // })
-  // .then(() => {
-  //   return db.query(
-  //     `CREATE TABLE comments (
-  //     comment_id SERIAL PRIMARY KEY,
-  //     author VARCHAR REFERENCES user(username),
-  //     review_id INT REFERENCES review(review_id),
-  //     votes INT DEFAULT 0,
-  //     created_at TIMESTAMP DEFAULT now(),
-  //     body TEXT
-  //   );`
-  //   );
-  // })
-  // .then(() => {
-  //   const queryStr = format(
-  //     `INSERT INTO comments
-  //   (author, review_id, votes, created_at, body)
-  //   VALUES %L
-  //   RETURNING *;`,
-  //     commentData.map((com) => [
-  //       com.author,
-  //       com.review_id,
-  //       com.votes,
-  //       com.created_at,
-  //       com.body,
-  //     ])
-  //   );
-  //   return db.query(queryStr);
-  // });
 };
 
 module.exports = seed;
