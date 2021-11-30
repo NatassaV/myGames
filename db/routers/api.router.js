@@ -2,6 +2,8 @@ const express = require("express");
 
 const apiRouter = express.Router();
 
-//make routers
+const categoriesRouter = require("./categories.router");
 
-module.exports = api.Router;
+apiRouter.use("/categories", categoriesRouter);
+
+module.exports = apiRouter;
