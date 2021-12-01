@@ -95,3 +95,20 @@ describe("GET /api/reviews/:review_id/comments", () => {
       });
   });
 });
+describe("POST /api/reviews/:review_id/comments", () => {
+  test("status 201, adds new comment for the responding review and returns it", () => {
+    const newComment = {
+      username: "bainesface",
+      body: "This review is not helpful and is very biased.",
+    };
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment).toBeInstanceOf(Object);
+        expect(body.comment[0]).toHaveProperty("author");
+        expect(body.comment[0]).toHaveProperty("created_at");
+      });
+  });
+});

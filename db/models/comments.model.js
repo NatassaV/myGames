@@ -7,3 +7,18 @@ exports.selectCommentsByReviewId = (review_id) => {
       return rows;
     });
 };
+
+exports.insertNewComment = (review_id, { username, body }) => {
+  return db
+    .query(
+      "INSERT INTO comments (author, body, review_id) VALUES($1, $2, $3) RETURNING*;",
+      [username, body, review_id]
+    )
+    .then(({ rows }) => {
+      console.log(rows);
+      return rows;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
