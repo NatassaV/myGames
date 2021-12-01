@@ -24,3 +24,9 @@ exports.updateReviewByID = (review_id, { inc_votes }) => {
       console.log(err);
     });
 };
+
+exports.selectReviews = () => {
+  return db.query("SELECT * FROM reviews;").then(({ rows }) => {
+    return rows;
+  });
+};
