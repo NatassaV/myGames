@@ -112,3 +112,14 @@ describe("POST /api/reviews/:review_id/comments", () => {
       });
   });
 });
+describe("DELETE /api/comments/:comment_id", () => {
+  test("status 204, delete the given comment", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({ body }) => {
+        console.log({ body });
+        expect(body).toEqual({});
+      });
+  });
+});
