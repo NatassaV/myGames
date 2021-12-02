@@ -1,4 +1,4 @@
-const db = require("../connection");
+const db = require("../db/connection");
 
 exports.selectCommentsByReviewId = (review_id) => {
   return db
