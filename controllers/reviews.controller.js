@@ -43,6 +43,7 @@ exports.getReviews = (req, res, next) => {
       res.status(200).send({ reviews: reviews });
     })
     .catch((err) => {
+      console.log(err);
       if (err.code) {
         res.status(400).send({ msg: "oh no, that looks wrong!" });
       } else {

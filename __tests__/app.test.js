@@ -105,6 +105,7 @@ describe("GET /api/reviews and some queries", () => {
       .get("/api/reviews")
       .expect(200)
       .then(({ body }) => {
+        console.log(body);
         expect(body.reviews).toBeSortedBy("created_at", { descending: true });
       });
   });
@@ -191,7 +192,7 @@ describe("GET/api responds with a description of available end points", () => {
       .get("/api")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toHaveProperty("endpoints");
+        expect(body).toHaveProperty("Here are some endpoints you can use");
       });
   });
 });

@@ -42,14 +42,23 @@ exports.selectReviews = (sort_by = "created_at", order = "DESC", category) => {
     });
   } else if (!category) {
     return db
-      .query(`SELECT * FROM reviews ORDER BY ${sort_by} ${order} ;`)
+      .query(
+        `SELECT reviews.*, COUNT(comment_id) AS comment_count
+      FROM reviews 
+      LEFT JOIN comments ON comments.review_id = reviews.review_id 
+      GROUP BY reviews.review_id 
+      ORDER BY ${sort_by} ${order} ;`
+      )
       .then(({ rows }) => {
         return rows;
       });
   } else {
     return db
       .query(
-        `SELECT * FROM reviews WHERE category = $1 ORDER BY ${sort_by} ${order} ;`,
+        `SELECT reviews.*, COUNT(comment_id) AS comment_count
+        FROM reviews WHERE category = $1
+        LEFT JOIN comments ON comments.review_id = reviews.review_id 
+        GROUP BY reviews.review_id ORDER BY ${sort_by} ${order} ;`,
         [category]
       )
       .then(({ rows }) => {
@@ -57,13 +66,3 @@ exports.selectReviews = (sort_by = "created_at", order = "DESC", category) => {
       });
   }
 };
-
-// exports.myTest = (review_id) => {
-//   return db
-//     .query(`SELECT review_id, COUNT $1 FROM comments GROUP BY review_id`, [
-//       review_id,
-//     ])
-//     .then(({ rows }) => {
-//       console.log(rows);
-//     });
-// };
