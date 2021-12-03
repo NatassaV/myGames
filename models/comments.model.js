@@ -15,11 +15,7 @@ exports.insertNewComment = (review_id, { username, body }) => {
       [username, body, review_id]
     )
     .then(({ rows }) => {
-      console.log(rows);
       return rows;
-    })
-    .catch((err) => {
-      console.log(err);
     });
 };
 

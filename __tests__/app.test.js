@@ -3,6 +3,7 @@ const testData = require("../db/data/test-data/index.js");
 const seed = require("../db/seeds/seed.js");
 const request = require("supertest");
 const app = require("../app");
+const { get } = require("superagent");
 
 beforeEach(() => {
   return seed(testData);
@@ -42,6 +43,14 @@ describe("GET /api/reviews/:review_id", () => {
         // });
       });
   });
+  test("return 400 bad request when given wrong data type", () => {
+    return request(app)
+      .get("/api/reviews/:something")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("oh no, that looks wrong!");
+      });
+  });
 });
 describe("PATCH /api/reviews/:review_id", () => {
   test("status 200, responds with updated review", () => {
@@ -69,8 +78,17 @@ describe("PATCH /api/reviews/:review_id", () => {
         // });
       });
   });
+  test("return 400 bad request when given wrong data type", () => {
+    return request(app)
+      .patch("/api/reviews/:something")
+      .send({ inc_votes: 3 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("oh no, that looks wrong!");
+      });
+  });
 });
-describe("GET /api/reviews", () => {
+describe("GET /api/reviews and some queries", () => {
   test("status 200, responds with array of reviews", () => {
     return request(app)
       .get(`/api/reviews`)
@@ -80,6 +98,30 @@ describe("GET /api/reviews", () => {
         expect(body.reviews[0]).toBeInstanceOf(Object);
         expect(body.reviews[0]).toHaveProperty("designer");
         expect(body.reviews[0]).toHaveProperty("votes");
+      });
+  });
+  test("sort_by default is date, status 200, returns sorted reviews", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("status 200, returns sorted reviews by requested column and order", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=votes&order=DESC")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews).toBeSortedBy("votes", { descending: true });
+      });
+  });
+  test("status 200, returns sorted reviews by requested column and order and filtering by category", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=votes&order=DESC&category=social deduction")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews).toBeSortedBy("votes", { descending: true });
       });
   });
 });
@@ -111,6 +153,19 @@ describe("POST /api/reviews/:review_id/comments", () => {
         expect(body.comment[0]).toHaveProperty("created_at");
       });
   });
+  test("status 400, wrong data", () => {
+    const newComment = {
+      username: "bainesface",
+      body: "This review is not helpful and is very biased.",
+    };
+    return request(app)
+      .post("/api/reviews/whatIsThis/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("oh no, that looks wrong!");
+      });
+  });
 });
 describe("DELETE /api/comments/:comment_id", () => {
   test("status 204, delete the given comment", () => {
@@ -118,8 +173,25 @@ describe("DELETE /api/comments/:comment_id", () => {
       .delete("/api/comments/1")
       .expect(204)
       .then(({ body }) => {
-        console.log({ body });
         expect(body).toEqual({});
+      });
+  });
+  test("return 400 bad request when given wrong data type", () => {
+    return request(app)
+      .delete("/api/comments/:something")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("oh no, that looks wrong!");
+      });
+  });
+});
+describe("GET/api responds with a description of available end points", () => {
+  test("Get/api status 200, responds with JSON giving the endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("endpoints");
       });
   });
 });

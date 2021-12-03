@@ -30,5 +30,17 @@
         }
       ]
     }
+  },
+  "GET /api/reviews/:review_id": {
+    "description": "serves the requested review"
+  },
+  "GET /api/reviews/:review_id/comments": {
+    "description": "serves the comments related to a specific review"
+  },
+  "POST /api/reviews/:review_id/comments": {
+    "description": "adds a new comment to the review with review_id"
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deleted a comment"
   }
 }
