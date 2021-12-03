@@ -13,7 +13,7 @@ apiRouter.use("/comments", commentsRouter);
 apiEndpoints = (req, res, next) => {
   res
     .status(200)
-    .send({ endpoints: { "Here are some endpoints you can use": endpoints } });
+    .send({ {"Here are some endpoints you can use": endpoints});
 };
 
 apiRouter.use("", apiEndpoints);
