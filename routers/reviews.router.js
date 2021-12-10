@@ -5,6 +5,7 @@ const {
   getReviewByID,
   patchReviewByID,
   getReviews,
+  anyTable,
 } = require("../controllers/reviews.controller");
 
 const {
@@ -14,7 +15,8 @@ const {
 
 console.log("inside reviews router");
 
-reviewsRouter.route("/").get(getReviews);
+reviewsRouter.route("/").get(anyTable);
+//reviewsRouter.route("/").get(getReviews);
 reviewsRouter.route("/:review_id").get(getReviewByID).patch(patchReviewByID);
 reviewsRouter
   .route("/:review_id/comments")

@@ -2,7 +2,7 @@ const {
   selectReviewByID,
   updateReviewByID,
   selectReviews,
-  myTest,
+  getAtable,
 } = require("../models/reviews.model");
 
 exports.getReviewByID = (req, res, next) => {
@@ -43,11 +43,17 @@ exports.getReviews = (req, res, next) => {
       res.status(200).send({ reviews: reviews });
     })
     .catch((err) => {
-      console.log(err);
       if (err.code) {
         res.status(400).send({ msg: "oh no, that looks wrong!" });
       } else {
         res.status(500).send({ msg: "internal server error!" });
       }
     });
+};
+
+exports.anyTable = (req, res, next) => {
+  const { table_name } = req.params;
+  getAtable(table_name).then((table) => {
+    res.status(200).send({ table: table });
+  });
 };

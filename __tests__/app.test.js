@@ -125,6 +125,15 @@ describe("GET /api/reviews and some queries", () => {
         expect(body.reviews).toBeSortedBy("votes", { descending: true });
       });
   });
+  // test("status 400, returns error msg", () => {
+  //   return request(app)
+  //     .get("/api/reviews?sort_by=jokes&order=DESC")
+  //     .expect(400)
+  //     .then(({ body }) => {
+  //       console.log(body);
+  //       expect(body.msg).toBe("Sorry, sorting by that isn't valid");
+  //     });
+  // });
 });
 describe("GET /api/reviews/:review_id/comments", () => {
   test("status 200, responds with an array of comments for the given review_id", () => {
@@ -193,6 +202,17 @@ describe("GET/api responds with a description of available end points", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body).toHaveProperty("Here are some endpoints you can use");
+      });
+  });
+});
+describe("GET/api", () => {
+  test.only("status 200, return any table requested if it exists", () => {
+    return request(app)
+      .get("/api/comments")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body).toBeInstanceOf(Array);
       });
   });
 });

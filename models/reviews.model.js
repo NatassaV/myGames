@@ -1,4 +1,3 @@
-const { bindComplete } = require("pg-protocol/dist/messages");
 const db = require("../db/connection");
 
 exports.selectReviewByID = (review_id) => {
@@ -32,13 +31,16 @@ exports.selectReviews = (sort_by = "created_at", order = "DESC", category) => {
       "review_id",
       "category",
       "created_at",
+      "designer",
       "votes",
       "comment_count",
     ].includes(sort_by)
   ) {
     return Promise.reject({
-      status: 400,
-      msg: `Sorry, sorting by ${sort_by} isn't valid`,
+      err: {
+        status: 400,
+        msg: `Sorry, sorting by that isn't valid`,
+      },
     });
   } else if (!category) {
     return db
@@ -64,5 +66,20 @@ exports.selectReviews = (sort_by = "created_at", order = "DESC", category) => {
       .then(({ rows }) => {
         return rows;
       });
+  }
+};
+
+exports.getAtable = (table_name) => {
+  if (["comments", "reviews", "categories"].includes(table_name)) {
+    return db.query(`SELECT * FROM ${table_name};`).then(({ rows }) => {
+      return rows;
+    });
+  } else {
+    return Promise.reject({
+      err: {
+        status: 400,
+        msg: `Sorry, invalid table`,
+      },
+    });
   }
 };
