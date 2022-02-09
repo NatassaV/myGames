@@ -1,4 +1,4 @@
-#Games API
+#Games API#
 
 #Setup
 To setup the project locally:
@@ -14,7 +14,7 @@ Endpoints for voted not available yet. Real signing up not available but coming 
 
 Login as happyamy2016 and leave you comment- make it witty :D
 
-
+Frontend deployed on Netlify : https://reviews-games.netlify.app/
 
 
 REST api
