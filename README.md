@@ -13,7 +13,8 @@ You will need to create two .env files for your project: .env.test and .env.deve
 Into each, add PGDATABASE=<database_name_here>, with the correct database name for that environment (see /db/setup.sql for the database names). Double check that these .env files are .gitignored.
 
 An api to access reviews for a list of games, login and vote for reviews, leave a comment and vote for comments.
-Endpoints for voted not available yet. Real signing up not available but coming soon!
+Endpoints for votes not available yet. Real signing up not available but coming soon!
+
 Login as happyamy2016 and leave you comment- make it witty :D
 
 Hosted on heroku : https://games-reviewed.herokuapp.com/api/categories
