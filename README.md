@@ -2,9 +2,12 @@
 
 #Setup
 To setup the project locally:
+
 Navigate to your desired directory.
 Run this code in your terminal: git clone https://github.com/NatassaV/myGames.git
+
 npm install to install all the dependencies
+
 Creating the .env files :
 You will need to create two .env files for your project: .env.test and .env.development.
 Into each, add PGDATABASE=<database_name_here>, with the correct database name for that environment (see /db/setup.sql for the database names). Double check that these .env files are .gitignored.
