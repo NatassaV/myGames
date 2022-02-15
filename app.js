@@ -12,8 +12,8 @@ const endpoints = require("./endpoints.json");
 const apiEndpoints = (req, res, next) => {
   res.status(200).send({ "Here are some endpoints you can use": endpoints });
 };
-app.get(express.json());
-apiRouter.use("/", apiEndpoints);
+app.use(express.json());
+apiRouter.get("/", apiEndpoints);
 
 app.use("/api", apiRouter);
 app.all("/*", handlesInvalidPaths);
