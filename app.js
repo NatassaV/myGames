@@ -13,7 +13,7 @@ const apiEndpoints = (req, res, next) => {
   res.status(200).send({ "Here are some endpoints you can use": endpoints });
 };
 app.use(express.json());
-apiRouter.get("/", apiEndpoints);
+app.route("/").get(apiEndpoints);
 
 app.use("/api", apiRouter);
 app.all("/*", handlesInvalidPaths);
@@ -22,3 +22,4 @@ app.use(handlePsqlErrors400);
 app.use(handle500Errors);
 
 module.exports = app;
+
