@@ -7,7 +7,7 @@ const {
   handle500Errors,
   handlesInvalidPaths,
 } = require("./errors");
-const endpoints = require("../endpoints.json");
+const endpoints = require("./endpoints.json");
 
 const apiEndpoints = (req, res, next) => {
   res.status(200).send({ "Here are some endpoints you can use": endpoints });
