@@ -1,4 +1,4 @@
-#Games API#  PSQL, express, jest
+#Games API#  PSQL, express, supertest, jest
 
 #Setup
 To setup the project locally:
